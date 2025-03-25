@@ -72,7 +72,7 @@ The following table lists the versions of BIG-IP that have been tested and valid
 
 | Azure BIG-IP Image Version | BIG-IP Version | Build | Solution | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 17.1.104000 | 17.1.1.4 | 0.0.9 | Standalone | Basic deployment testing only | |
+| 17.1.104000 | 17.1.1.4 | 0.0.9 | Standalone | Basic deployment testing only | 2025-03-25 |
 | 16.1.303000 | 16.1.3.3 | 0.0.3 | Standalone, Failover, Autoscale | Validated | |
 | 15.1.801000 | 15.1.8.1 | 0.0.3 | Standalone, Failover, Autoscale | Validated | |
 | 14.1.503000 | 14.1.5.3 | 0.0.5 | Standalone, Failover, Autoscale | Validated | |
