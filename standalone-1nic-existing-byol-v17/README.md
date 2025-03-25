@@ -103,7 +103,7 @@ Use the appropriate button below to deploy:
 
 - **BYOL** (bring your own license): This allows you to use an existing BIG-IP license.
 
-  [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/f5jason/f5-arm-v1-custom/refs/heads/main/standalone-1nic-existing-byol-v17/azuredeploy.json)
+  [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ff5jason%2Ff5-arm-v1-custom%2Frefs%2Fheads%2Fmain%2Fstandalone-1nic-existing-byol-v17%2Fazuredeploy.json)
 
 
 ### Template parameters
