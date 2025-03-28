@@ -275,7 +275,7 @@
         "newAvailabilitySetName": "[concat(variables('dnsLabel'), '-avset')]",
         "availabilitySetName": "['jchiu_avset']",
         "zonesAvailable": "[not(empty(pickZones('Microsoft.Compute', 'virtualMachines', variables('location'))))]",
-        "availabilitySetId": {
+        "availabilitySet": {
             "id": "[resourceId('Microsoft.Compute/availabilitySets', 'jchiu_avset')]"
         },
         "mgmtSubnetRef": "[concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', parameters('vnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('mgmtSubnetName'))]",
