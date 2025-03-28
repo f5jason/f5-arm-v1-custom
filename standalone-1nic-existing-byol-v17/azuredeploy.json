@@ -275,8 +275,8 @@
         "newAvailabilitySetName": "[concat(variables('dnsLabel'), '-avset')]",
         "availabilitySetName": "['jchiu_avset']",
         "zonesAvailable": "[not(empty(pickZones('Microsoft.Compute', 'virtualMachines', variables('location'))))]",
-        "availabilitySet": {
-            "id": "[resourceId('Microsoft.Compute/availabilitySets', 'jchiu_avset')]"
+        "availabilitySet": {            
+           "id": "/subscriptions/4bd08e66-f1da-40f0-9de0-237567f7e61b/resourceGroups/jchiu_rg/providers/Microsoft.Compute/availabilitySets/jchiu_avset"
         },
         "mgmtSubnetRef": "[concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', parameters('vnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('mgmtSubnetName'))]",
         "imageNameSub": "[variables('imageNameArray')[variables('bigIpMajorVersion')][parameters('imageName')]]",
