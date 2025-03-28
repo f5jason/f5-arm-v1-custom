@@ -112,6 +112,18 @@
             },
             "type": "string"
         },
+        "zoneChoice": {
+            "defaultValue": "1",
+            "metadata": {
+                "description": "If you want the VM placed in an Azure Availability Zone, and the Azure region you are deploying to supports it, specify the number of the existing Availability Zone you want to use."
+            },
+            "allowedValues": [
+                "1",
+                "2",
+                "3"
+            ],
+            "type": "string"
+        },
         "provisionPublicIP": {
             "allowedValues": [
                 "Yes",
@@ -542,7 +554,7 @@
                 "storageProfile": "[if(variables('useCustomImage'), variables('storageProfileArray').customImage, variables('storageProfileArray').platformImage)]"
             },
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
-            "zones": "[json('null')]",
+            "zones": "[if(variables('zonesAvailable'), array(parameters('zoneChoice')), json('null'))]",
             "type": "Microsoft.Compute/virtualMachines"
         },
         {
