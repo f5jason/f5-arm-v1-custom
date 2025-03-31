@@ -454,7 +454,6 @@
                     }
                 ]
             },
-            "condition": "[equals(toUpper(parameters('avSetChoice')), 'CREATE_NEW')]",
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "type": "Microsoft.Network/networkSecurityGroups"
         },
@@ -469,6 +468,7 @@
                 "PlatformFaultDomainCount": 2,
                 "PlatformUpdateDomainCount": 2
             },
+            "condition": "[equals(toUpper(parameters('avSetChoice')), 'CREATE_NEW')]",
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "type": "Microsoft.Compute/availabilitySets"
         },
