@@ -454,6 +454,7 @@
                     }
                 ]
             },
+            "condition": "[equals(toUpper(parameters('avSetChoice')), 'CREATE_NEW')]",
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "type": "Microsoft.Network/networkSecurityGroups"
         },
