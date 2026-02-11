@@ -281,9 +281,7 @@
         "imageNameSub": "[variables('imageNameArray')[variables('bigIpMajorVersion')][parameters('imageName')]]",
         "imageNameArray": {
             "17": {
-                "AllOneBootLocation": "big-all-1slot",
                 "AllTwoBootLocations": "big-all-2slot",
-                "LTMOneBootLocation": "big-ltm-1slot",
                 "LTMTwoBootLocations": "big-ltm-2slot"
             },
             "16": {
