@@ -60,7 +60,7 @@
             "type": "string"
         },
         "bigIpVersion": {
-            "defaultValue": "17.1.104000",
+            "defaultValue": "17.1.300249",
             "metadata": {
                 "description": "F5 BIG-IP version you want to use."
             },
