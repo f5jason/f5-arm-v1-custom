@@ -17,8 +17,11 @@
         "instanceName": {
             "value": "f5vm01"
         },
+        "numberOfExternalIps": {
+            "value": 1
+        },
         "instanceType": {
-            "value": "Standard_D2s_v4"
+            "value": "Standard_D8s_v4"
         },
         "imageName": {
             "value": "AllTwoBootLocations"
@@ -42,6 +45,18 @@
             "value": ""
         },
         "mgmtIpAddress": {
+            "value": "DYNAMIC"
+        },
+        "externalSubnetName": {
+            "value": ""
+        },
+        "externalIpAddressRangeStart": {
+            "value": "DYNAMIC"
+        },
+        "internalSubnetName": {
+            "value": ""
+        },
+        "internalIpAddress": {
             "value": "DYNAMIC"
         },
         "avSetChoice": {

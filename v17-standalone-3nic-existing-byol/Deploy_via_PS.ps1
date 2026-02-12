@@ -1,7 +1,7 @@
 ## Script parameters being asked for below match to parameters in the azuredeploy.json file, otherwise pointing to the ##
 ## azuredeploy.parameters.json file for values to use.  Some options below are mandatory, some (such as region) can    ##
 ## be supplied inline when running this script but if they aren't then the default will be used as specified below.    ##
-## Example Command: .\Deploy_via_PS.ps1 -adminUsername azureuser -authenticationType password -adminPasswordOrKey <value> -dnsLabel <value> -instanceName f5vm01 -instanceType Standard_D2s_v4 -imageName AllTwoBootLocations -bigIpVersion 16.1.303000 -bigIpModules ltm:nominal -licenseKey1 <value> -vnetName <value> -vnetResourceGroupName <value> -mgmtSubnetName <value> -mgmtIpAddress DYNAMIC -avSetChoice CREATE_NEW -zoneChoice 1 -provisionPublicIP Yes -declarationUrl NOT_SPECIFIED -ntpServer 0.pool.ntp.org -timeZone UTC -customImageUrn OPTIONAL -customImage OPTIONAL -allowUsageAnalytics Yes -allowPhoneHome Yes -resourceGroupName <value>
+## Example Command: .\Deploy_via_PS.ps1 -adminUsername azureuser -authenticationType password -adminPasswordOrKey <value> -dnsLabel <value> -instanceName f5vm01 -numberOfExternalIps 1 -instanceType Standard_D8s_v4 -imageName AllTwoBootLocations -bigIpVersion 16.1.303000 -bigIpModules ltm:nominal -licenseKey1 <value> -vnetName <value> -vnetResourceGroupName <value> -mgmtSubnetName <value> -mgmtIpAddress DYNAMIC -externalSubnetName <value> -externalIpAddressRangeStart DYNAMIC -internalSubnetName <value> -internalIpAddress DYNAMIC -avSetChoice CREATE_NEW -zoneChoice 1 -provisionPublicIP Yes -declarationUrl NOT_SPECIFIED -ntpServer 0.pool.ntp.org -timeZone UTC -customImageUrn OPTIONAL -customImage OPTIONAL -allowUsageAnalytics Yes -allowPhoneHome Yes -resourceGroupName <value>
 
 param(
 
@@ -10,6 +10,7 @@ param(
   [string] [Parameter(Mandatory=$True)] $adminPasswordOrKey,
   [string] [Parameter(Mandatory=$True)] $dnsLabel,
   [string] [Parameter(Mandatory=$True)] $instanceName,
+  [string] [Parameter(Mandatory=$True)] $numberOfExternalIps,
   [string] [Parameter(Mandatory=$True)] $instanceType,
   [string] [Parameter(Mandatory=$True)] $imageName,
   [string] [Parameter(Mandatory=$True)] $bigIpVersion,
@@ -19,6 +20,10 @@ param(
   [string] [Parameter(Mandatory=$True)] $vnetResourceGroupName,
   [string] [Parameter(Mandatory=$True)] $mgmtSubnetName,
   [string] [Parameter(Mandatory=$True)] $mgmtIpAddress,
+  [string] [Parameter(Mandatory=$True)] $externalSubnetName,
+  [string] [Parameter(Mandatory=$True)] $externalIpAddressRangeStart,
+  [string] [Parameter(Mandatory=$True)] $internalSubnetName,
+  [string] [Parameter(Mandatory=$True)] $internalIpAddress,
   [string] [Parameter(Mandatory=$True)] $avSetChoice,
   [string] [Parameter(Mandatory=$True)] $zoneChoice,
   [string] [Parameter(Mandatory=$True)] $provisionPublicIP,
@@ -59,7 +64,7 @@ $adminPasswordOrKeySecure = ConvertTo-SecureString -String $adminPasswordOrKey -
 (ConvertFrom-Json $tagValues).psobject.properties | ForEach -Begin {$tagValues=@{}} -process {$tagValues."$($_.Name)" = $_.Value}
 
 # Create Arm Deployment
-$deployment = New-AzureRmResourceGroupDeployment -Name $resourceGroupName -ResourceGroupName $resourceGroupName -TemplateFile $templateFilePath -TemplateParameterFile $parametersFilePath -Verbose -adminUsername $adminUsername -authenticationType $authenticationType -adminPasswordOrKey $adminPasswordOrKeySecure -dnsLabel $dnsLabel -instanceName $instanceName -instanceType $instanceType -imageName $imageName -bigIpVersion $bigIpVersion -bigIpModules $bigIpModules -licenseKey1 $licenseKey1 -vnetName $vnetName -vnetResourceGroupName $vnetResourceGroupName -mgmtSubnetName $mgmtSubnetName -mgmtIpAddress $mgmtIpAddress -avSetChoice $avSetChoice -zoneChoice $zoneChoice -provisionPublicIP $provisionPublicIP -declarationUrl $declarationUrl -ntpServer $ntpServer -timeZone $timeZone -customImageUrn $customImageUrn -customImage $customImage -restrictedSrcAddress $restrictedSrcAddress -tagValues $tagValues -allowUsageAnalytics $allowUsageAnalytics -allowPhoneHome $allowPhoneHome 
+$deployment = New-AzureRmResourceGroupDeployment -Name $resourceGroupName -ResourceGroupName $resourceGroupName -TemplateFile $templateFilePath -TemplateParameterFile $parametersFilePath -Verbose -adminUsername $adminUsername -authenticationType $authenticationType -adminPasswordOrKey $adminPasswordOrKeySecure -dnsLabel $dnsLabel -instanceName $instanceName -numberOfExternalIps $numberOfExternalIps -instanceType $instanceType -imageName $imageName -bigIpVersion $bigIpVersion -bigIpModules $bigIpModules -licenseKey1 $licenseKey1 -vnetName $vnetName -vnetResourceGroupName $vnetResourceGroupName -mgmtSubnetName $mgmtSubnetName -mgmtIpAddress $mgmtIpAddress -externalSubnetName $externalSubnetName -externalIpAddressRangeStart $externalIpAddressRangeStart -internalSubnetName $internalSubnetName -internalIpAddress $internalIpAddress -avSetChoice $avSetChoice -zoneChoice $zoneChoice -provisionPublicIP $provisionPublicIP -declarationUrl $declarationUrl -ntpServer $ntpServer -timeZone $timeZone -customImageUrn $customImageUrn -customImage $customImage -restrictedSrcAddress $restrictedSrcAddress -tagValues $tagValues -allowUsageAnalytics $allowUsageAnalytics -allowPhoneHome $allowPhoneHome 
 
 # Print Output of Deployment to Console
 $deployment

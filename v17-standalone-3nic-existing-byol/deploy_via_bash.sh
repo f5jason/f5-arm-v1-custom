@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Bash Script to deploy an F5 ARM template into Azure, using azure cli 1.0 ##
-## Example Command: ./deploy_via_bash.sh --adminUsername azureuser --authenticationType password --adminPasswordOrKey <value> --dnsLabel <value> --instanceName f5vm01 --instanceType Standard_D2s_v4 --imageName AllTwoBootLocations --bigIpVersion 16.1.303000 --bigIpModules ltm:nominal --licenseKey1 <value> --vnetName <value> --vnetResourceGroupName <value> --mgmtSubnetName <value> --mgmtIpAddress DYNAMIC --avSetChoice CREATE_NEW --zoneChoice 1 --provisionPublicIP Yes --declarationUrl NOT_SPECIFIED --ntpServer 0.pool.ntp.org --timeZone UTC --customImageUrn OPTIONAL --customImage OPTIONAL --allowUsageAnalytics Yes --allowPhoneHome Yes --resourceGroupName <value> --azureLoginUser <value> --azureLoginPassword <value>
+## Example Command: ./deploy_via_bash.sh --adminUsername azureuser --authenticationType password --adminPasswordOrKey <value> --dnsLabel <value> --instanceName f5vm01 --numberOfExternalIps 1 --instanceType Standard_D8s_v4 --imageName AllTwoBootLocations --bigIpVersion 16.1.303000 --bigIpModules ltm:nominal --licenseKey1 <value> --vnetName <value> --vnetResourceGroupName <value> --mgmtSubnetName <value> --mgmtIpAddress DYNAMIC --externalSubnetName <value> --externalIpAddressRangeStart DYNAMIC --internalSubnetName <value> --internalIpAddress DYNAMIC --avSetChoice CREATE_NEW --zoneChoice 1 --provisionPublicIP Yes --declarationUrl NOT_SPECIFIED --ntpServer 0.pool.ntp.org --timeZone UTC --customImageUrn OPTIONAL --customImage OPTIONAL --allowUsageAnalytics Yes --allowPhoneHome Yes --resourceGroupName <value> --azureLoginUser <value> --azureLoginPassword <value>
 
 # Assign Script Parameters and Define Variables
 # Specify static items below, change these as needed or make them parameters
@@ -25,6 +25,9 @@ while [[ $# -gt 1 ]]; do
             shift 2;;
         --instanceName)
             instanceName=$2
+            shift 2;;
+        --numberOfExternalIps)
+            numberOfExternalIps=$2
             shift 2;;
         --instanceType)
             instanceType=$2
@@ -52,6 +55,18 @@ while [[ $# -gt 1 ]]; do
             shift 2;;
         --mgmtIpAddress)
             mgmtIpAddress=$2
+            shift 2;;
+        --externalSubnetName)
+            externalSubnetName=$2
+            shift 2;;
+        --externalIpAddressRangeStart)
+            externalIpAddressRangeStart=$2
+            shift 2;;
+        --internalSubnetName)
+            internalSubnetName=$2
+            shift 2;;
+        --internalIpAddress)
+            internalIpAddress=$2
             shift 2;;
         --avSetChoice)
             avSetChoice=$2
@@ -111,7 +126,7 @@ while [[ $# -gt 1 ]]; do
 done
 
 #If a required parameter is not passed, the script will prompt for it below
-required_variables="adminUsername authenticationType adminPasswordOrKey dnsLabel instanceName instanceType imageName bigIpVersion bigIpModules licenseKey1 vnetName vnetResourceGroupName mgmtSubnetName mgmtIpAddress avSetChoice zoneChoice provisionPublicIP declarationUrl ntpServer timeZone customImageUrn customImage allowUsageAnalytics allowPhoneHome resourceGroupName "
+required_variables="adminUsername authenticationType adminPasswordOrKey dnsLabel instanceName numberOfExternalIps instanceType imageName bigIpVersion bigIpModules licenseKey1 vnetName vnetResourceGroupName mgmtSubnetName mgmtIpAddress externalSubnetName externalIpAddressRangeStart internalSubnetName internalIpAddress avSetChoice zoneChoice provisionPublicIP declarationUrl ntpServer timeZone customImageUrn customImage allowUsageAnalytics allowPhoneHome resourceGroupName "
 for variable in $required_variables
         do
         if [ -z ${!variable} ] ; then
@@ -135,4 +150,4 @@ az group create -n $resourceGroupName -l $region
 # Deploy ARM Template, right now cannot specify parameter file and parameters inline via Azure CLI
 template_file="./azuredeploy.json"
 parameter_file="./azuredeploy.parameters.json"
-az deployment group create --verbose --no-wait --template-file $template_file -g $resourceGroupName -n $resourceGroupName --parameters "{\"adminUsername\":{\"value\":\"$adminUsername\"},\"authenticationType\":{\"value\":\"$authenticationType\"},\"adminPasswordOrKey\":{\"value\":\"$adminPasswordOrKey\"},\"dnsLabel\":{\"value\":\"$dnsLabel\"},\"instanceName\":{\"value\":\"$instanceName\"},\"instanceType\":{\"value\":\"$instanceType\"},\"imageName\":{\"value\":\"$imageName\"},\"bigIpVersion\":{\"value\":\"$bigIpVersion\"},\"bigIpModules\":{\"value\":\"$bigIpModules\"},\"licenseKey1\":{\"value\":\"$licenseKey1\"},\"vnetName\":{\"value\":\"$vnetName\"},\"vnetResourceGroupName\":{\"value\":\"$vnetResourceGroupName\"},\"mgmtSubnetName\":{\"value\":\"$mgmtSubnetName\"},\"mgmtIpAddress\":{\"value\":\"$mgmtIpAddress\"},\"avSetChoice\":{\"value\":\"$avSetChoice\"},\"zoneChoice\":{\"value\":\"$zoneChoice\"},\"provisionPublicIP\":{\"value\":\"$provisionPublicIP\"},\"declarationUrl\":{\"value\":\"$declarationUrl\"},\"ntpServer\":{\"value\":\"$ntpServer\"},\"timeZone\":{\"value\":\"$timeZone\"},\"customImageUrn\":{\"value\":\"$customImageUrn\"},\"customImage\":{\"value\":\"$customImage\"},\"restrictedSrcAddress\":{\"value\":\"$restrictedSrcAddress\"},\"tagValues\":{\"value\":$tagValues},\"allowUsageAnalytics\":{\"value\":\"$allowUsageAnalytics\"},\"allowPhoneHome\":{\"value\":\"$allowPhoneHome\"}}"
+az deployment group create --verbose --no-wait --template-file $template_file -g $resourceGroupName -n $resourceGroupName --parameters "{\"adminUsername\":{\"value\":\"$adminUsername\"},\"authenticationType\":{\"value\":\"$authenticationType\"},\"adminPasswordOrKey\":{\"value\":\"$adminPasswordOrKey\"},\"dnsLabel\":{\"value\":\"$dnsLabel\"},\"instanceName\":{\"value\":\"$instanceName\"},\"numberOfExternalIps\":{\"value\":$numberOfExternalIps},\"instanceType\":{\"value\":\"$instanceType\"},\"imageName\":{\"value\":\"$imageName\"},\"bigIpVersion\":{\"value\":\"$bigIpVersion\"},\"bigIpModules\":{\"value\":\"$bigIpModules\"},\"licenseKey1\":{\"value\":\"$licenseKey1\"},\"vnetName\":{\"value\":\"$vnetName\"},\"vnetResourceGroupName\":{\"value\":\"$vnetResourceGroupName\"},\"mgmtSubnetName\":{\"value\":\"$mgmtSubnetName\"},\"mgmtIpAddress\":{\"value\":\"$mgmtIpAddress\"},\"externalSubnetName\":{\"value\":\"$externalSubnetName\"},\"externalIpAddressRangeStart\":{\"value\":\"$externalIpAddressRangeStart\"},\"internalSubnetName\":{\"value\":\"$internalSubnetName\"},\"internalIpAddress\":{\"value\":\"$internalIpAddress\"},\"avSetChoice\":{\"value\":\"$avSetChoice\"},\"zoneChoice\":{\"value\":\"$zoneChoice\"},\"provisionPublicIP\":{\"value\":\"$provisionPublicIP\"},\"declarationUrl\":{\"value\":\"$declarationUrl\"},\"ntpServer\":{\"value\":\"$ntpServer\"},\"timeZone\":{\"value\":\"$timeZone\"},\"customImageUrn\":{\"value\":\"$customImageUrn\"},\"customImage\":{\"value\":\"$customImage\"},\"restrictedSrcAddress\":{\"value\":\"$restrictedSrcAddress\"},\"tagValues\":{\"value\":$tagValues},\"allowUsageAnalytics\":{\"value\":\"$allowUsageAnalytics\"},\"allowPhoneHome\":{\"value\":\"$allowPhoneHome\"}}"

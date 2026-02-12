@@ -1,8 +1,6 @@
-# Deploying the BIG-IP VE in Azure - Single NIC
+# Deploying the BIG-IP VE in Azure - 3 NIC
 
-[![Slack Status](https://f5cloudsolutions.herokuapp.com/badge.svg)](https://f5cloudsolutions.herokuapp.com)
-[![Releases](https://img.shields.io/github/release/f5networks/f5-azure-arm-templates.svg)](https://github.com/f5networks/f5-azure-arm-templates/releases)
-[![Issues](https://img.shields.io/github/issues/f5networks/f5-azure-arm-templates.svg)](https://github.com/f5networks/f5-azure-arm-templates/issues)
+WARNING: This is a v1 template from https://github.com/F5Networks/f5-azure-arm-templates. The repository was archived (read-only) in Dec-2023. While still functional with 17.1, it is no longer fully supported.
 
 ## Contents
 
@@ -17,7 +15,7 @@
 
 ## Introduction
 
-This solution uses an ARM template to launch a single NIC deployment of a cloud-focused BIG-IP VE in Microsoft Azure. Traffic flows from the BIG-IP VE to the application servers. This is the standard Cloud design where the  BIG-IP VE instance is running with a single interface, where both management and data plane traffic is processed.  This is a traditional model in the cloud where the deployment is considered one-armed.
+This solution uses an ARM template to launch a three NIC deployment of a cloud-focused BIG-IP VE in Microsoft Azure. Traffic flows from the BIG-IP VE to the application servers. This is the standard on-premise-like cloud design where the BIG-IP VE instance is running with a management, front-end application traffic (Virtual Server) and back-end application interface.
 
 The BIG-IP VE has the [Local Traffic Manager (LTM)](https://f5.com/products/big-ip/local-traffic-manager-ltm) module enabled to provide advanced traffic management functionality. This means you can also configure the BIG-IP VE to enable F5's L4/L7 security features, access control, and intelligent traffic management.
 
@@ -49,9 +47,11 @@ For information on getting started using F5's ARM templates on GitHub, see [Micr
 - See the **[Configuration Example](#configuration-example)** section for a configuration diagram and description for this solution.
 - The default PAYG images have been updated to "F5 BIG-IP BEST with IPI and Threat Campaigns".  Note: that changing the image can affect re-deployments  (see above). If you have an existing subscription and need to preserve the image id/name, use the custom image parameter (template parameter = customImage or customImageUrn).
 - All Azure ARM templates now allow you to deploy any public or private offer image from Azure marketplace. Specifying the offer URN in the customImageUrn parameter overrides the choices for bigIpVersion and imageName parameters. See the F5 Azure offer list here for a list of current offers: [Azure offer list](https://github.com/F5Networks/f5-azure-arm-templates/blob/main/azure-offer-list.yaml). NOTE: Not all versions of BIG-IP are supported with all templates. Check the supported versions matrix on each template README for a list of supported versions for that template.
+- This template has some optional post-deployment configuration.  See the [Post-Deployment Configuration section](#post-deployment-configuration) for details.
 - **NEW:**  Beginning with release 5.3.0.0, the BIG-IP image names have changed (previous options were Good, Better, and Best).  Now you choose a BIG-IP VE image based on whether you need [LTM](https://www.f5.com/products/big-ip-services/local-traffic-manager) only (name starts with **LTM**) or All modules (image name starts with **All**) available (including [WAF](https://www.f5.com/products/security/advanced-waf), [AFM](https://www.f5.com/products/security/advanced-firewall-manager), etc.), and if you need 1 or 2 boot locations.  Use 2 boot locations if you expect to upgrade the BIG-IP VE in the future. If you do not need room to upgrade (if you intend to create a new instance when a new version of BIG-IP VE is released), use an image with 1 boot location.  See this [Matrix](https://clouddocs.f5.com/cloud/public/v1/matrix.html#microsoft-azure) for recommended Azure instance types. See the Supported BIG-IP Versions table for the available options for different BIG-IP versions.
 - Previous tagged releases can be used to reference functionality that has been changed or removed.
 - All templates now deploy Standard SKU Azure Public IP Addresses.
+- If you choose "No" in response to the provisionPublicIP parameter, the choice for "numberOfExternalIps" is not honored and no public IP addresses are created.
 - All templates deploy Azure Virtual Machines and Virtual Machine Scale Sets into Availability Zones in supported regions; Availability Sets are still created in unsupported regions. Virtual Machine Scale Sets are distributed across zones 1, 2, and 3; failover Virtual Machines across zones 1 and 2. Standalone Virtual Machines are placed in zone 1 by default; however, you may select zone 1, 2, or 3 using the new zoneChoice parameter.
 - This template uses [F5 BIG-IP Runtime Init](https://github.com/F5Networks/f5-bigip-runtime-init) to install F5 Automation Toolchain packages (AS3, DO, CFE, FAST, and TS). You can update the version of one or more packages by editing the template customData variable. For example: To update the AS3 package to the latest version, click on the [Github release page](https://github.com/F5Networks/f5-appsvcs-extension/releases) for the f5-appsvcs-extension. In the template customData variable, in the install_operations section, update the AS3 extensionVersion value to the desired version and the extensionHash value to contents of the RPM sha256 file located in the release assets for that version. You can also add more packages to be installed using the same procedure.
 
@@ -103,7 +103,7 @@ Use the appropriate button below to deploy:
 
 - **BYOL** (bring your own license): This allows you to use an existing BIG-IP license.
 
-  [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FF5Networks%2Ff5-azure-arm-templates%2Fv10.3.0.0%2Fsupported%2Fstandalone%2F1nic%2Fexisting-stack%2Fbyol%2Fazuredeploy.json)
+  [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FF5Networks%2Ff5-azure-arm-templates%2Fv10.3.0.0%2Fsupported%2Fstandalone%2F3nic%2Fexisting-stack%2Fbyol%2Fazuredeploy.json)
 
 ### Template parameters
 
@@ -114,6 +114,7 @@ Use the appropriate button below to deploy:
 | adminPasswordOrKey | Yes | Password or SSH public key to login to the Virtual Machine. Note: There are a number of special characters that you should avoid using for F5 product user accounts.  See [K2873](https://support.f5.com/csp/article/K2873) for details. Note: If using key-based authentication, this should be the public key as a string, typically starting with **---- BEGIN SSH2 PUBLIC KEY ----** and ending with **---- END SSH2 PUBLIC KEY ----**. |
 | dnsLabel | Yes | Unique DNS Name for the Public IP address used to access the Virtual Machine. |
 | instanceName | Yes | Name of the Virtual Machine. |
+| numberOfExternalIps | Yes | The number of public/private IP addresses you want to deploy for the application traffic (external) NIC on the BIG-IP VE to be used for virtual servers. |
 | instanceType | Yes | Instance size of the Virtual Machine. |
 | imageName | Yes | F5 SKU (image) you want to deploy. Note: The disk size of the VM will be determined based on the option you select.  **Important**: If intending to provision multiple modules, ensure the appropriate value is selected, such as ****AllTwoBootLocations or AllOneBootLocation****. |
 | bigIpVersion | Yes | F5 BIG-IP version you want to use. |
@@ -123,6 +124,10 @@ Use the appropriate button below to deploy:
 | vnetResourceGroupName | Yes | The name of the resource group that contains the Virtual Network where the BIG-IP VE will be placed. |
 | mgmtSubnetName | Yes | Name of the existing mgmt subnet - with external access to the Internet. **Important**: The subnet you provide for the mgmt NIC **must** be unique. |
 | mgmtIpAddress | Yes | MGMT subnet IP Address to use for the BIG-IP management IP address. Leave the default DYNAMIC to use a dynamically assigned IP address. |
+| externalSubnetName | Yes | Name of the existing external subnet - with external access to Internet. **Important**: The subnet you provide for the external NIC **must** be unique. |
+| externalIpAddressRangeStart | Yes | The static private IP address you want to assign to the first external Azure public IP (for self IP). An additional private IP address will be assigned for each public IP address you specified in **numberOfExternalIps**.  For example, entering 10.100.1.50 here and choosing 2 in numberOfExternalIps would result in 10.100.1.50 (self IP), 10.100.1.51 and 10.100.1.52 being configured as static private IP addresses for external virtual servers. Leave the default DYNAMIC to use a dynamically assigned IP address. |
+| internalSubnetName | Yes | Name of the existing internal subnet. **Important**: The subnet you provide for the internal NIC **must** be unique. |
+| internalIpAddress | Yes | Internal subnet IP address you want to use for the BIG-IP internal self IP address. Leave the default DYNAMIC to use a dynamically assigned IP address. |
 | avSetChoice | Yes | If you want the VM placed in a new Azure Availability Set, leave the default value of **CREATE_NEW**, otherwise specify the name of the existing Availability Set you want to use. Note: If you are using an existing AV Set, this deployment must be in the same Azure Resource Group as the AV Set. |
 | zoneChoice | Yes | If you want the VM placed in an Azure Availability Zone, and the Azure region you are deploying to supports it, specify the number of the existing Availability Zone you want to use. |
 | provisionPublicIP | Yes | Provision Public IP addresses for BIG-IP Management traffic. These addresses will be configured directly on the Azure network interfaces. |
@@ -143,7 +148,7 @@ As an alternative to deploying through the Azure Portal (GUI) each solution prov
 #### PowerShell Script Example
 
 ```powershell
-## Example Command: .\Deploy_via_PS.ps1 -adminUsername azureuser -authenticationType password -adminPasswordOrKey <value> -dnsLabel <value> -instanceName f5vm01 -instanceType Standard_D2s_v4 -imageName AllTwoBootLocations -bigIpVersion 16.1.303000 -bigIpModules ltm:nominal -licenseKey1 <value> -vnetName <value> -vnetResourceGroupName <value> -mgmtSubnetName <value> -mgmtIpAddress DYNAMIC -avSetChoice CREATE_NEW -zoneChoice 1 -provisionPublicIP Yes -declarationUrl NOT_SPECIFIED -ntpServer 0.pool.ntp.org -timeZone UTC -customImageUrn OPTIONAL -customImage OPTIONAL -allowUsageAnalytics Yes -allowPhoneHome Yes -resourceGroupName <value>
+## Example Command: .\Deploy_via_PS.ps1 -adminUsername azureuser -authenticationType password -adminPasswordOrKey <value> -dnsLabel <value> -instanceName f5vm01 -numberOfExternalIps 1 -instanceType Standard_D8s_v4 -imageName AllTwoBootLocations -bigIpVersion 16.1.303000 -bigIpModules ltm:nominal -licenseKey1 <value> -vnetName <value> -vnetResourceGroupName <value> -mgmtSubnetName <value> -mgmtIpAddress DYNAMIC -externalSubnetName <value> -externalIpAddressRangeStart DYNAMIC -internalSubnetName <value> -internalIpAddress DYNAMIC -avSetChoice CREATE_NEW -zoneChoice 1 -provisionPublicIP Yes -declarationUrl NOT_SPECIFIED -ntpServer 0.pool.ntp.org -timeZone UTC -customImageUrn OPTIONAL -customImage OPTIONAL -allowUsageAnalytics Yes -allowPhoneHome Yes -resourceGroupName <value>
 ```
 
 =======
@@ -151,15 +156,31 @@ As an alternative to deploying through the Azure Portal (GUI) each solution prov
 #### Azure CLI (1.0) Script Example
 
 ```bash
-## Example Command: ./deploy_via_bash.sh --adminUsername azureuser --authenticationType password --adminPasswordOrKey <value> --dnsLabel <value> --instanceName f5vm01 --instanceType Standard_D2s_v4 --imageName AllTwoBootLocations --bigIpVersion 16.1.303000 --bigIpModules ltm:nominal --licenseKey1 <value> --vnetName <value> --vnetResourceGroupName <value> --mgmtSubnetName <value> --mgmtIpAddress DYNAMIC --avSetChoice CREATE_NEW --zoneChoice 1 --provisionPublicIP Yes --declarationUrl NOT_SPECIFIED --ntpServer 0.pool.ntp.org --timeZone UTC --customImageUrn OPTIONAL --customImage OPTIONAL --allowUsageAnalytics Yes --allowPhoneHome Yes --resourceGroupName <value> --azureLoginUser <value> --azureLoginPassword <value>
+## Example Command: ./deploy_via_bash.sh --adminUsername azureuser --authenticationType password --adminPasswordOrKey <value> --dnsLabel <value> --instanceName f5vm01 --numberOfExternalIps 1 --instanceType Standard_D8s_v4 --imageName AllTwoBootLocations --bigIpVersion 16.1.303000 --bigIpModules ltm:nominal --licenseKey1 <value> --vnetName <value> --vnetResourceGroupName <value> --mgmtSubnetName <value> --mgmtIpAddress DYNAMIC --externalSubnetName <value> --externalIpAddressRangeStart DYNAMIC --internalSubnetName <value> --internalIpAddress DYNAMIC --avSetChoice CREATE_NEW --zoneChoice 1 --provisionPublicIP Yes --declarationUrl NOT_SPECIFIED --ntpServer 0.pool.ntp.org --timeZone UTC --customImageUrn OPTIONAL --customImage OPTIONAL --allowUsageAnalytics Yes --allowPhoneHome Yes --resourceGroupName <value> --azureLoginUser <value> --azureLoginPassword <value>
 ```
 
 ## Configuration Example
 
-The following is an example configuration diagram for this solution deployment. In this scenario, all access to the BIG-IP VE appliance is through the same IP address and virtual network interface (vNIC).  This interface processes both management and data plane traffic.
+The following is an example configuration diagram for this solution deployment. In this scenario, one NIC is for management, one NIC is for external traffic and one NIC is for internal traffic.  This is the traditional BIG-IP deployment model where data-plane, management and internal traffic is separate. The IP addresses in this example may be different in your implementation.
 
 ![Configuration Example](../images/azure-example-diagram.png)
 
+## Post-Deployment Configuration
+
+Use this section for optional configuration changes after you have deployed the template.
+
+### Additional public IP addresses
+
+This ARM template supports using up to 20 public IP addresses.  After you initially deployed the template, if you now want to include additional public IP addresses, use the following guidance.
+
+#### Adding additional public IP addresses to the deployment
+
+The deployment template supports creation of 1-20 external public IP addresses for application traffic (first one is used for external NIC Self IP).  Follow the steps below to add **additional** public IP addresses to the deployment:
+
+- Create a new Azure public IP address resource in the deployment resource group
+- Create a new, secondary IP configuration resource (for example: *myResourceGroupName-ext-ipconfig9*) in the properties of the external Azure network interface (for example: *myResourceGroupName-ext0*)
+
+When you create virtual servers on the BIG-IP VE for these additional addresses, the BIG-IP network virtual server destination IP address should match the private IP addresses of both secondary Azure IP configurations assigned to the backend pool that is referenced by the application's Azure load balancing rule.
 
 
 ## Documentation

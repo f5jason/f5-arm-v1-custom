@@ -1,8 +1,6 @@
 # Deploying the BIG-IP VE in Azure - Single NIC
 
-[![Slack Status](https://f5cloudsolutions.herokuapp.com/badge.svg)](https://f5cloudsolutions.herokuapp.com)
-[![Releases](https://img.shields.io/github/release/f5networks/f5-azure-arm-templates.svg)](https://github.com/f5networks/f5-azure-arm-templates/releases)
-[![Issues](https://img.shields.io/github/issues/f5networks/f5-azure-arm-templates.svg)](https://github.com/f5networks/f5-azure-arm-templates/issues)
+WARNING: This is a v1 template from https://github.com/F5Networks/f5-azure-arm-templates. The repository was archived (read-only) in Dec-2023. While still functional with 17.1, it is no longer fully supported.
 
 ## Contents
 
@@ -72,7 +70,7 @@ The following table lists the versions of BIG-IP that have been tested and valid
 
 | Azure BIG-IP Image Version | BIG-IP Version | Build | Solution | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 17.1.104000 | 17.1.1.4 | 0.0.9 | Standalone | Basic deployment testing only | 2025-03-25 |
+| 17.1.300249 | 17.1.3.0 |  | Standalone | Basic deployment testing only | 2026-02-11 |
 | 16.1.303000 | 16.1.3.3 | 0.0.3 | Standalone, Failover, Autoscale | Validated | |
 | 15.1.801000 | 15.1.8.1 | 0.0.3 | Standalone, Failover, Autoscale | Validated | |
 | 14.1.503000 | 14.1.5.3 | 0.0.5 | Standalone, Failover, Autoscale | Validated | |
