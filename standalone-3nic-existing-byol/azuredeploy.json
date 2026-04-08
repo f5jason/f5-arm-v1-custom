@@ -70,7 +70,7 @@
             "type": "int"
         },
         "instanceType": {
-            "defaultValue": "Standard_D8s_v4",
+            "defaultValue": "Standard_Ds4_v2",
             "metadata": {
                 "description": "Instance size of the Virtual Machine."
             },

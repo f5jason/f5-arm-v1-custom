@@ -40,7 +40,7 @@
             "type": "string"
         },
         "instanceType": {
-            "defaultValue": "Standard_D4s_v4",
+            "defaultValue": "Standard_Ds4_v2",
             "metadata": {
                 "description": "Instance size of the Virtual Machine."
             },
