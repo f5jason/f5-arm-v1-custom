@@ -267,7 +267,7 @@
         "skuToUse": "[if(equals(length(variables('customImageUrnArray')), 4), variables('customImageUrnArray')[2], concat('f5-', variables('imageNameSub'),'-byol'))]",
         "offerToUse": "[if(equals(length(variables('customImageUrnArray')), 4), variables('customImageUrnArray')[1], concat('f5-big-ip-', variables('imageNameArray').offerPostfix[variables('imageNameSub')]))]",
         "versionToUse": "[if(equals(length(variables('customImageUrnArray')), 4), variables('customImageUrnArray')[3], parameters('bigIpVersion'))]",
-        "bigIpMajorVersion": "[if(equals(parameters('bigIpVersion'), 'latest'), '16', split(variables('versionToUse'), '.')[0])]",
+        "bigIpMajorVersion": "[if(equals(parameters('bigIpVersion'), 'latest'), '21', split(variables('versionToUse'), '.')[0])]",
         "bigIpMajorVersionInt": "[int(variables('bigipMajorVersion'))]",
         "imagePlan": {
             "name": "[variables('skuToUse')]",
@@ -298,6 +298,12 @@
         "mgmtSubnetRef": "[concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', parameters('vnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('mgmtSubnetName'))]",
         "imageNameSub": "[variables('imageNameArray')[variables('bigIpMajorVersion')][parameters('imageName')]]",
         "imageNameArray": {
+            "21": {
+                "AllOneBootLocation": "big-all-1slot",
+                "AllTwoBootLocations": "big-all-2slot",
+                "LTMOneBootLocation": "big-ltm-1slot",
+                "LTMTwoBootLocations": "big-ltm-2slot"
+            },
             "17": {
                 "AllOneBootLocation": "big-all-1slot",
                 "AllTwoBootLocations": "big-all-2slot",
