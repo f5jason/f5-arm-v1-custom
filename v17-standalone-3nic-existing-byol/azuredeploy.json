@@ -90,7 +90,12 @@
             "type": "string"
         },
         "bigIpVersion": {
-            "defaultValue": "17.1.104000",
+            "defaultValue": "17.1.301000",
+            "allowedValues": [
+                "17.1.301000",
+                "17.5.105000",
+                "21.0.001000",
+            ]
             "metadata": {
                 "description": "F5 BIG-IP version you want to use."
             },
