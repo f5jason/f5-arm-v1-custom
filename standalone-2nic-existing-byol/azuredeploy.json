@@ -85,6 +85,25 @@
             },
             "type": "string"
         },
+        "zoneChoice": {
+            "defaultValue": "1",
+            "metadata": {
+                "description": "If you want the VM placed in an Azure Availability Zone, and the Azure region you are deploying to supports it, specify the number of the existing Availability Zone you want to use."
+            },
+            "allowedValues": [
+                "1",
+                "2",
+                "3"
+            ],
+            "type": "string"
+        },
+        "avSetChoice": {
+            "defaultValue": "CREATE_NEW",
+            "metadata": {
+                "description": "If you want the VM placed in a new Azure Availability Set, leave the default value of **CREATE_NEW**, otherwise specify the name of the existing Availability Set you want to use. Note: If you are using an existing AV Set, this deployment must be in the same Azure Resource Group as the AV Set."
+            },
+            "type": "string"
+        },
         "vnetName": {
             "metadata": {
                 "description": "The name of the existing virtual network to which you want to connect the BIG-IP VEs."
@@ -98,6 +117,7 @@
             "type": "string"
         },
         "mgmtSubnetName": {
+            "defaultValue": "management",
             "metadata": {
                 "description": "Name of the existing mgmt subnet - with external access to the Internet. **Important**: The subnet you provide for the mgmt NIC **must** be unique."
             },
@@ -111,6 +131,7 @@
             "type": "string"
         },
         "externalSubnetName": {
+            "defaultValue": "external",
             "metadata": {
                 "description": "Name of the existing external subnet - with external access to Internet. **Important**: The subnet you provide for the external NIC **must** be unique."
             },
@@ -121,25 +142,6 @@
             "metadata": {
                 "description": "The static private IP address you want to assign to the first external Azure public IP (for self IP). An additional private IP address will be assigned for each public IP address you specified in **numberOfExternalIps**.  For example, entering 10.100.1.50 here and choosing 2 in numberOfExternalIps would result in 10.100.1.50 (self IP), 10.100.1.51 and 10.100.1.52 being configured as static private IP addresses for external virtual servers. Leave the default DYNAMIC to use a dynamically assigned IP address."
             },
-            "type": "string"
-        },
-        "avSetChoice": {
-            "defaultValue": "CREATE_NEW",
-            "metadata": {
-                "description": "If you want the VM placed in a new Azure Availability Set, leave the default value of **CREATE_NEW**, otherwise specify the name of the existing Availability Set you want to use. Note: If you are using an existing AV Set, this deployment must be in the same Azure Resource Group as the AV Set."
-            },
-            "type": "string"
-        },
-        "zoneChoice": {
-            "defaultValue": "1",
-            "metadata": {
-                "description": "If you want the VM placed in an Azure Availability Zone, and the Azure region you are deploying to supports it, specify the number of the existing Availability Zone you want to use."
-            },
-            "allowedValues": [
-                "1",
-                "2",
-                "3"
-            ],
             "type": "string"
         },
         "numberOfExternalIps": {
@@ -166,7 +168,7 @@
                 19,
                 20
             ],
-            "defaultValue": 1,
+            "defaultValue": 0,
             "metadata": {
                 "description": "The number of public/private IP addresses you want to deploy for the application traffic (external) NIC on the BIG-IP VE to be used for **virtual servers**. Set to 0 if you do not want virtual server IPs created."
             },
