@@ -2,6 +2,25 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
     "contentVersion": "10.3.0.0",
     "parameters": {
+        "zoneChoice": {
+            "defaultValue": "1",
+            "metadata": {
+                "description": "If you want the VM placed in an Azure Availability Zone, and the Azure region you are deploying to supports it, specify the number of the existing Availability Zone you want to use."
+            },
+            "allowedValues": [
+                "1",
+                "2",
+                "3"
+            ],
+            "type": "string"
+        },
+        "avSetChoice": {
+            "defaultValue": "CREATE_NEW",
+            "metadata": {
+                "description": "If you want the VM placed in a new Azure Availability Set, leave the default value of **CREATE_NEW**, otherwise specify the name of the existing Availability Set you want to use. Note: If you are using an existing AV Set, this deployment must be in the same Azure Resource Group as the AV Set."
+            },
+            "type": "string"
+        },
         "adminUsername": {
             "defaultValue": "azureuser",
             "metadata": {
@@ -26,14 +45,28 @@
             },
             "type": "securestring"
         },
+        "licenseKey": {
+            "defaultValue": "",
+            "metadata": {
+                "description": "The license token for the F5 BIG-IP VE (BYOL). Leave blank for manual license activation after deployment."
+            },
+            "type": "string"
+        },
+        "restrictedSrcAddress": {
+            "metadata": {
+                "description": "This field restricts management access to a specific network or address. Enter an IP address or address range in CIDR notation. Please do NOT use 0.0.0.0/0. Instead, restrict the IP address range to your client or trusted network, for example 55.55.55.55/32. Production should never expose the BIG-IP Management interface to the Internet. "
+            },
+            "type": "string"
+        },
         "dnsLabel": {
+            "defaultValue": "bigip1",
             "metadata": {
                 "description": "Unique DNS Name for the Public IP address used to access the Virtual Machine."
             },
             "type": "string"
         },
         "instanceName": {
-            "defaultValue": "f5vm01",
+            "defaultValue": "bigip1",
             "metadata": {
                 "description": "Name of the Virtual Machine."
             },
@@ -75,32 +108,6 @@
             "defaultValue": "ltm:nominal",
             "metadata": {
                 "description": "Comma separated list of modules and levels to provision, for example, ltm:nominal,asm:nominal"
-            },
-            "type": "string"
-        },
-        "licenseKey": {
-            "defaultValue": "",
-            "metadata": {
-                "description": "The license token for the F5 BIG-IP VE (BYOL). Leave blank for manual license activation after deployment."
-            },
-            "type": "string"
-        },
-        "zoneChoice": {
-            "defaultValue": "1",
-            "metadata": {
-                "description": "If you want the VM placed in an Azure Availability Zone, and the Azure region you are deploying to supports it, specify the number of the existing Availability Zone you want to use."
-            },
-            "allowedValues": [
-                "1",
-                "2",
-                "3"
-            ],
-            "type": "string"
-        },
-        "avSetChoice": {
-            "defaultValue": "CREATE_NEW",
-            "metadata": {
-                "description": "If you want the VM placed in a new Azure Availability Set, leave the default value of **CREATE_NEW**, otherwise specify the name of the existing Availability Set you want to use. Note: If you are using an existing AV Set, this deployment must be in the same Azure Resource Group as the AV Set."
             },
             "type": "string"
         },
@@ -217,12 +224,6 @@
             "defaultValue": "OPTIONAL",
             "metadata": {
                 "description": "If you would like to deploy using a local BIG-IP image, provide either the full URL to the VHD in Azure storage **or** the full resource ID to an existing Microsoft.Compute image resource.  **Note**: Unless specifically required, leave the default of **OPTIONAL**."
-            },
-            "type": "string"
-        },
-        "restrictedSrcAddress": {
-            "metadata": {
-                "description": "This field restricts management access to a specific network or address. Enter an IP address or address range in CIDR notation. Please do NOT use 0.0.0.0/0. Instead, restrict the IP address range to your client or trusted network, for example 55.55.55.55/32. Production should never expose the BIG-IP Management interface to the Internet. "
             },
             "type": "string"
         },
