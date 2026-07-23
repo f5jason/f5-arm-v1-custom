@@ -18,13 +18,13 @@
             "value": "f5vm01"
         },
         "instanceType": {
-            "value": "Standard_D2s_v4"
+            "value": "Standard_Ds3_v2"
         },
         "imageName": {
             "value": "AllTwoBootLocations"
         },
         "bigIpVersion": {
-            "value": "16.1.303000"
+            "value": "17.1.301000"
         },
         "bigIpModules": {
             "value": "ltm:nominal"

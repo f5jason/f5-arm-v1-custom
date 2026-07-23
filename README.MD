@@ -10,6 +10,10 @@ Use the appropriate button below to deploy:
 
   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ff5jason%2Ff5-arm-v1-custom%2Frefs%2Fheads%2Fmain%2Fstandalone-3nic-existing-byol%2Fazuredeploy.json)
 
+- **standalone-2nic-existing-byol** (bring your own license): This allows you to use an existing BIG-IP license.
+
+  [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ff5jason%2Ff5-arm-v1-custom%2Frefs%2Fheads%2Fmain%2Fstandalone-2nic-existing-byol%2Fazuredeploy.json)
+
 
 - **standalone-1nic-existing-byol** (bring your own license): This allows you to use an existing BIG-IP license.
   
