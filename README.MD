@@ -21,7 +21,9 @@ Use the appropriate button below to deploy:
 
 
 # Change Log
-2026-04-07: Change BIG-IP Version field to pick list format with options for 17.1, 17.5, 21.0
+2026-07-23: Added 2-NIC ARM template
+
+2026-04-07: Change BIG-IP Version field to pick list format with options for 17.1, 17.5, 21.0 - defaults to BIG-IP 17.5.x
 
 2026-02-12: Added updated template v17-standalone-3nic-existing-byol - defaults to BIG-IP 17.1.3.x
 
