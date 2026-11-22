@@ -685,7 +685,7 @@
         },
         {
             "apiVersion": "[variables('storageApiVersion')]",
-            "kind": "Storage",
+            "kind": "StorageV2",
             "location": "[variables('location')]",
             "name": "[variables('newDataStorageAccountName')]",
             "properties": {
