@@ -3,3 +3,5 @@ These example v1 templates are from https://github.com/F5Networks/f5-azure-arm-t
 
 # Deploying the BIG-IP VE in Azure - 3 NIC
 This is a modified version of the 3-NIC template. It contains updated software version selection options.
+
+  [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ff5jason%2Ff5-arm-v1-custom%2Frefs%2Fheads%2Fmain%2Fstandalone-3nic-existing-byol%2Fazuredeploy.json)
