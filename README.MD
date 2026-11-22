@@ -21,7 +21,7 @@ Use the appropriate button below to deploy:
 
 
 # Change Log
-2026-11-22: Updated software versions list to include the October 14 Critical Releases (CR2) - `https://my.f5.com/manage/s/article/K000163848`
+2026-11-22: Updated software versions list to include the latest Critical Release - `https://my.f5.com/manage/s/article/K000163848`
 
 2026-07-23: Added 2-NIC ARM template
 
