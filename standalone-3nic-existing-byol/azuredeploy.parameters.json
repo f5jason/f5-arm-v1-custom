@@ -27,7 +27,7 @@
             "value": "AllTwoBootLocations"
         },
         "bigIpVersion": {
-            "value": "17.1.301000"
+            "value": "17.5.111061"
         },
         "bigIpModules": {
             "value": "ltm:nominal"
